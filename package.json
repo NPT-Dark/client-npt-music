@@ -1,5 +1,4 @@
 {
-  "proxy": "https://server-music-npt.herokuapp.com/",
   "name": "npt-music",
   "version": "0.1.0",
   "private": true,

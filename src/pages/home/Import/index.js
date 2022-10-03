@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './style.scss'
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+import { API } from '../../../Api';
 function Import({status,close}) {
     const [valueInput,setValueInput] = useState({
         name:"",
@@ -9,15 +10,9 @@ function Import({status,close}) {
     })
     const ImportSong = () => {
         const fetchSong = async () => {
-            const response = await fetch("/api/song",{
-                method:"POST",
-                body:JSON.stringify(valueInput),
-                headers:{
-                    'Content-Type':'application/json'
-                }
-            })
-            if(response.ok)
+           try
             {
+                await API.post("/api/song",valueInput)
                 setValueInput({
                     name:"",
                     link:"",
@@ -32,7 +27,7 @@ function Import({status,close}) {
                     progress: undefined,
                     });
             }
-            else
+            catch(err)
             {
                 toast.error('🦄 Import Failed !', {
                     position: "top-right",

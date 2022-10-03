@@ -5,6 +5,7 @@ import Import from "./Import";
 import "./style.scss";
 import { NavLink } from "react-router-dom";
 import IconDelete from '../../images/icon-delete.png'
+import { API } from "../../Api";
 function Home() {
     const [openimport,setOpenImport] = useState(false)
     const [song,setSong] = useState([{name:"",link:""}])
@@ -18,16 +19,10 @@ function Home() {
         setOpenImport(false)
     }
     useEffect(()=>{
-        const fetchSong = async () => {
-            const response = await fetch("/api/song")
-            const json = await response.json()
-            if(response.ok)
-            {
-                setSong(json)
-                setSongCurrent(json[0])
-            }
-        }
-        fetchSong();
+            API.get("/api/song").then(item=>{
+                setSong(item.data)
+                setSongCurrent(item.data[0])
+            })
     },[load])
     const AutoNextSong = () =>{
         if(index !== song.length-1)
@@ -42,9 +37,7 @@ function Home() {
         }
     }
     const handleDelete = async() => {
-        const response = await fetch('/api/song/' + song[index]._id,{
-            method:'DELETE'
-        })
+        const response = await API.delete('/api/song/' + song[index]._id)
         if(response.ok)
         {
             setLoad(!load)
